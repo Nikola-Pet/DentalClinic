@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Dental.Models.Intervention>
+@inject Dental.Data.IMedicalRecordRepo IMedicalRecord
+@{
+    ViewData["Title"] = "Index";
+
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Medical Record Number
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+                Description
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @{int numMr = IMedicalRecord.GetMedicalRecordNumberbyId(item.MedicalRecordNumber);
+}
+                @numMr
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+           
+        </tr>
+}
+    </tbody>
+</table>

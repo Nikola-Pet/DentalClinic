@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Dental.Models.Schedule>
+@inject Dental.Data.IPatientRepo IPatient
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Scheduled dental checkups</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PatientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @{string fullName = IPatient.GetPatienttFullNamebyId(item.PatientId); }
+                @fullName
+            </td>
+            @if (item.DateTime == null)
+            {
+                <td>
+                    <p class="text-danger">Determine the date of the dental examination</p>
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateTime)
+                </td>
+            }
+
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.ScheduleId">Edit</a> |
+            <a asp-action="Delete" asp-route-id="@item.ScheduleId">Delete</a> |
+            <a asp-controller="Interventions" asp-action="CreateS" asp-route-id="@item.ScheduleId">Intervention</a>
+
+
+
+        </td>
+        </tr>
+        }
+    </tbody>
+</table>

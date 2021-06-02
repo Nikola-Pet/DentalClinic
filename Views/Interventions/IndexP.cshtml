@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Dental.Models.Intervention>
+@inject Dental.Data.IDentistRepo IDentist
+@{
+    ViewData["Title"] = "Index";
+
+}
+
+<h1>Index</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Dentist
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @{string fullName = IDentist.GetDentistFullNamebyId(item.DentistId); }
+                @fullName
+            </td>
+
+        </tr>
+}
+    </tbody>
+</table>
