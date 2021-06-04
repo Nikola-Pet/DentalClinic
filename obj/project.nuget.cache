@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "B/sIZgM/pV2P99ooonJNE4OokVHSl0bfOIbZGwvuQjUlmF+yxqsyuukvnLXDXXyXIgjKaLWvQOZe1Q4CsyFR2g==",
+  "dgSpecHash": "tGu0J9P5LWKE4omGVivks89h/iWVNEfD7+vphh6REZgzZB4U6CSMkdZ9sOUNC4+P9V0sRvJ2qvOLJSF7U1AcYA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\19pet\\source\\repos\\Dental\\Dental\\Dental.csproj",
+  "projectFilePath": "C:\\Users\\19pet\\OneDrive\\Dokumenti\\GitHub\\DentalClinic\\Dental.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\19pet\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\19pet\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\5.0.6\\microsoft.aspnetcore.authentication.jwtbearer.5.0.6.nupkg.sha512",

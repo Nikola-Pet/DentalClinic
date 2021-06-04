@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dental.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,14 @@ namespace Dental.Data
             _context = context;
         }
 
+        public IEnumerable<Intervention> GetInterventionbyDentistId(int id)
+        {
+            return _context.Interventions.Where(x => x.DentistId == id);
+        }
 
+        public IEnumerable<Intervention> GetInterventionbyMedicalRecordId(int mrId)
+        {
+            return _context.Interventions.Where(x => x.MedicalRecordNumber == mrId);
+        }
     }
 }

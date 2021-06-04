@@ -30,5 +30,11 @@ namespace Dental.Data
             int mrNumber = mr.MedicalRecordNumber;
             return mrNumber;
         }
+
+        public MedicalRecord GetMedicalRecordbyPatientId(int id)
+        {
+            var mr = _context.MedicalRecords.FirstOrDefault(x => x.PatientId == id);
+            return mr;
+        }
     }
 }

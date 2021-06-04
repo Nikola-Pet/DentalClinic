@@ -19,11 +19,7 @@ namespace Dental.Controllers
             _authenticate = authenticate;
         }
 
-        //// GET: Patients
-        //public async Task<IActionResult> Index()
-        //{
-        //    return View(await _context.Patients.ToListAsync());
-        //}
+    
 
        
         public async Task<IActionResult> Details()
@@ -95,7 +91,7 @@ namespace Dental.Controllers
             return View(patient);
         }
 
-        // GET: Patients/Delete/5
+ 
         public async Task<IActionResult> Delete()
         {
             string token;

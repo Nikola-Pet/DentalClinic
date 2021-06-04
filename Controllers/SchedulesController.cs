@@ -101,6 +101,9 @@ namespace Dental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ScheduleId,PatientId,DentistId,DateTime")] Schedule schedule)
         {
+            string token;
+            HttpContext.Request.Cookies.TryGetValue("token", out token);
+
             if (id != schedule.ScheduleId)
             {
                 return NotFound();
@@ -123,6 +126,11 @@ namespace Dental.Controllers
                     {
                         throw;
                     }
+                }
+                if (_authenticate.ValidateRoleJwtToken(token) == "Dentist")
+                {
+                    return RedirectToAction(nameof(IndexD));
+
                 }
                 return RedirectToAction(nameof(Index));
             }

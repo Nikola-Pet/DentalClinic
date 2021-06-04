@@ -15,11 +15,17 @@ namespace Dental.Controllers
     {
         private readonly DentalClinicContext _context;
         private readonly IAuthenticate _authenticate;
+        private readonly IInterventionRepo _interventionRepo;
+        private readonly IMedicalRecordRepo _medicalRecordRepo;
 
-        public InterventionsController(DentalClinicContext context, IAuthenticate authenticate)
+
+
+        public InterventionsController(DentalClinicContext context, IAuthenticate authenticate, IInterventionRepo interventionRepo, IMedicalRecordRepo medicalRecordRepo)
         {
             _context = context;
             _authenticate = authenticate;
+            _interventionRepo = interventionRepo;
+            _medicalRecordRepo = medicalRecordRepo;
         }
 
         // GET: Interventions
@@ -30,7 +36,8 @@ namespace Dental.Controllers
             int id = int.Parse(_authenticate.ValidateIdJwtToken(token));
 
 
-            return View(_context.Interventions.Where(x => x.DentistId == id));
+
+            return View(_interventionRepo.GetInterventionbyDentistId(id));
         }
 
         public async Task<IActionResult> IndexP()
@@ -39,28 +46,18 @@ namespace Dental.Controllers
             HttpContext.Request.Cookies.TryGetValue("token", out token);
             int id = int.Parse(_authenticate.ValidateIdJwtToken(token));
 
-            var mr = _context.MedicalRecords.FirstOrDefault(x => x.PatientId == id);
-            int mrId = mr.MedicalRecordNumber;
+            var mr = _medicalRecordRepo.GetMedicalRecordbyPatientId(id);
+            int mrId = mr.MedicalRecordNumber; 
 
-            return View(_context.Interventions.Where(x => x.MedicalRecordNumber == mrId));
+            return View(_interventionRepo.GetInterventionbyMedicalRecordId(mrId));
         }
 
-     
-
-        // GET: Interventions/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        //public IActionResult CreateS()
-        //{
-        //    return View();
-        //}
-
-        // POST: Interventions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateInterventionDto createInterventionDto)
@@ -71,10 +68,9 @@ namespace Dental.Controllers
 
             Intervention intervention = new Intervention();
 
-            var mr = _context.MedicalRecords.FirstOrDefault(x => x.MedicalRecordNumber == createInterventionDto.MedicalRecordNumber);
             
             intervention.DentistId = id;
-            intervention.MedicalRecordNumber = mr.MedicalRecordNumber;
+            intervention.MedicalRecordNumber = _medicalRecordRepo.GetMedicalRecordNumberbyId(createInterventionDto.MedicalRecordNumber);
             intervention.DateTime = createInterventionDto.DateTime;
             intervention.Description = createInterventionDto.Description;
 
@@ -99,7 +95,7 @@ namespace Dental.Controllers
             {
                 return NotFound();
             }
-            var mr = _context.MedicalRecords.FirstOrDefault(x => x.PatientId == schedule.PatientId);
+            var mr = _medicalRecordRepo.GetMedicalRecordbyPatientId(schedule.PatientId);
             intervention.MedicalRecordNumber = mr.MedicalRecordNumber;
             intervention.DateTime = (DateTime)schedule.DateTime;
 

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\19pet\\source\\repos\\Dental\\Dental\\Dental.csproj": {}
+    "C:\\Users\\19pet\\OneDrive\\Dokumenti\\GitHub\\DentalClinic\\Dental.csproj": {}
   },
   "projects": {
-    "C:\\Users\\19pet\\source\\repos\\Dental\\Dental\\Dental.csproj": {
+    "C:\\Users\\19pet\\OneDrive\\Dokumenti\\GitHub\\DentalClinic\\Dental.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\19pet\\source\\repos\\Dental\\Dental\\Dental.csproj",
+        "projectUniqueName": "C:\\Users\\19pet\\OneDrive\\Dokumenti\\GitHub\\DentalClinic\\Dental.csproj",
         "projectName": "Dental",
-        "projectPath": "C:\\Users\\19pet\\source\\repos\\Dental\\Dental\\Dental.csproj",
+        "projectPath": "C:\\Users\\19pet\\OneDrive\\Dokumenti\\GitHub\\DentalClinic\\Dental.csproj",
         "packagesPath": "C:\\Users\\19pet\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\19pet\\source\\repos\\Dental\\Dental\\obj\\",
+        "outputPath": "C:\\Users\\19pet\\OneDrive\\Dokumenti\\GitHub\\DentalClinic\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Visual Studio\\Shared\\NuGetPackages"

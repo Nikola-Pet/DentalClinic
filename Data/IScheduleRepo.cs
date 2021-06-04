@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace Dental.Data
 {
-    interface IScheduleRepo
+    public interface IScheduleRepo
     {
+
     }
 }

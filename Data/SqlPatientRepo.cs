@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dental.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,5 +20,7 @@ namespace Dental.Data
             string fullName = patient.FirstName + " " + patient.LastName;
             return fullName;
         }
+
+        
     }
 }
