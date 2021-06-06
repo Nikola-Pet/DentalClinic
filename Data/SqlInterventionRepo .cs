@@ -24,5 +24,15 @@ namespace Dental.Data
         {
             return _context.Interventions.Where(x => x.MedicalRecordNumber == mrId);
         }
+
+        public void AddInterverntion(Intervention intervention)
+        {
+            _context.Add(intervention);
+        }
+
+        public async Task SaveChanges()
+        {
+             await _context.SaveChangesAsync();
+        }
     }
 }

@@ -13,19 +13,21 @@ namespace Dental.Controllers
 {
     public class InterventionsController : Controller
     {
-        private readonly DentalClinicContext _context;
         private readonly IAuthenticate _authenticate;
         private readonly IInterventionRepo _interventionRepo;
         private readonly IMedicalRecordRepo _medicalRecordRepo;
+        private readonly IScheduleRepo _scheduleRepo;
 
 
 
-        public InterventionsController(DentalClinicContext context, IAuthenticate authenticate, IInterventionRepo interventionRepo, IMedicalRecordRepo medicalRecordRepo)
+
+
+        public InterventionsController(IAuthenticate authenticate, IInterventionRepo interventionRepo, IMedicalRecordRepo medicalRecordRepo, IScheduleRepo scheduleRepo)
         {
-            _context = context;
             _authenticate = authenticate;
             _interventionRepo = interventionRepo;
             _medicalRecordRepo = medicalRecordRepo;
+            _scheduleRepo = scheduleRepo;
         }
 
         // GET: Interventions
@@ -76,8 +78,8 @@ namespace Dental.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(intervention);
-                await _context.SaveChangesAsync();
+                _interventionRepo.AddInterverntion(intervention);
+                await _interventionRepo.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             return View(intervention);
@@ -90,7 +92,7 @@ namespace Dental.Controllers
                 return NotFound();
             }
             Intervention intervention = new Intervention();
-            var schedule = await _context.Schedules.FindAsync(id);
+            var schedule = await _scheduleRepo.GetSchedulebyId(id);
             if (schedule == null)
             {
                 return NotFound();

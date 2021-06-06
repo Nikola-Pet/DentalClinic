@@ -10,5 +10,7 @@ namespace Dental.Data
     {
         IEnumerable<Intervention> GetInterventionbyDentistId(int id);
         IEnumerable<Intervention> GetInterventionbyMedicalRecordId(int mrId);
+        void AddInterverntion(Intervention intervention);
+        Task SaveChanges(); 
     }
 }
