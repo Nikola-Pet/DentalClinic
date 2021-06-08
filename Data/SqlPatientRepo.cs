@@ -1,4 +1,5 @@
 ﻿using Dental.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,19 @@ namespace Dental.Data
             return fullName;
         }
 
-        
+        public Task<Patient> GetPatientbyId (int id)
+        {
+            return _context.Patients.FirstOrDefaultAsync(m => m.PatientId == id);
+        }
+
+        public async Task SaveChanges()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdatePatient(Patient patient)
+        {
+             _context.Update(patient);
+        }
     }
 }

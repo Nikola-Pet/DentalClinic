@@ -12,11 +12,14 @@ namespace Dental.Controllers
     {
         private readonly DentalClinicContext _context;
         private readonly IAuthenticate _authenticate;
+        private readonly IPatientRepo _patientRepo;
 
-        public PatientsController(DentalClinicContext context, IAuthenticate authenticate)
+
+        public PatientsController(DentalClinicContext context, IAuthenticate authenticate, IPatientRepo patientRepo)
         {
             _context = context;
             _authenticate = authenticate;
+            _patientRepo = patientRepo;
         }
 
     
@@ -29,8 +32,7 @@ namespace Dental.Controllers
             int id = int.Parse(_authenticate.ValidateIdJwtToken(token));
 
 
-            var patient = await _context.Patients
-                .FirstOrDefaultAsync(m => m.PatientId == id);
+            var patient = await _patientRepo.GetPatientbyId(id);
             if (patient == null)
             {
                 return NotFound();
@@ -46,7 +48,7 @@ namespace Dental.Controllers
             int id = int.Parse(_authenticate.ValidateIdJwtToken(token));
 
            
-            var patient = await _context.Patients.FindAsync(id);
+            var patient = await _patientRepo.GetPatientbyId(id);
             if (patient == null)
             {
                 return NotFound();
@@ -72,8 +74,8 @@ namespace Dental.Controllers
             {
                 try
                 {
-                    _context.Update(patient);
-                    await _context.SaveChangesAsync();
+                    await _patientRepo.UpdatePatient(patient);
+                    await _patientRepo.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -86,7 +88,7 @@ namespace Dental.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details));
             }
             return View(patient);
         }
