@@ -146,11 +146,11 @@ namespace Dental.Controllers
             }
             if (patient.Password != Data.Utility.Encrypt(changePasswordDto.Password))
             {
-                BadRequest(new { message = "The password is incorrect" });
+                return BadRequest(new { message = "The password is incorrect" });
             }
             if (changePasswordDto.NewPassword != changePasswordDto.ConfirmPassword)
             {
-                BadRequest(new { message = "The new password is incorrect" });
+                return BadRequest(new { message = "The new password is incorrect" });
             }
 
             patient.Password = Data.Utility.Encrypt(changePasswordDto.NewPassword);
