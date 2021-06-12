@@ -32,9 +32,18 @@ namespace Dental.Data
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdatePatient(Patient patient)
+        public void UpdatePatient(Patient patient)
         {
              _context.Update(patient);
         }
+        public void DeletePatient(Patient patient)
+        {
+            _context.Remove(patient);
+        }
+        public bool PatientExists(int id)
+        {
+            return _context.Patients.Any(e => e.PatientId == id);
+        }
+
     }
 }

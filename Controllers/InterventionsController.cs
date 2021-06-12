@@ -18,10 +18,6 @@ namespace Dental.Controllers
         private readonly IMedicalRecordRepo _medicalRecordRepo;
         private readonly IScheduleRepo _scheduleRepo;
 
-
-
-
-
         public InterventionsController(IAuthenticate authenticate, IInterventionRepo interventionRepo, IMedicalRecordRepo medicalRecordRepo, IScheduleRepo scheduleRepo)
         {
             _authenticate = authenticate;
@@ -30,19 +26,16 @@ namespace Dental.Controllers
             _scheduleRepo = scheduleRepo;
         }
 
-        // GET: Interventions
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             string token;
             HttpContext.Request.Cookies.TryGetValue("token", out token);
             int id = int.Parse(_authenticate.ValidateIdJwtToken(token));
 
-
-
             return View(_interventionRepo.GetInterventionbyDentistId(id));
         }
 
-        public async Task<IActionResult> IndexP()
+        public IActionResult IndexP()
         {
             string token;
             HttpContext.Request.Cookies.TryGetValue("token", out token);

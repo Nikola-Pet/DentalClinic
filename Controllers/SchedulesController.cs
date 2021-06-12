@@ -13,39 +13,42 @@ namespace Dental.Controllers
 {
     public class SchedulesController : Controller
     {
-        private readonly DentalClinicContext _context;
 
         private readonly IAuthenticate _authenticate;
+        private readonly IScheduleRepo _scheduleRepo;
+        private readonly IDentistRepo _dentistRepo;
 
-        public SchedulesController(DentalClinicContext context, IAuthenticate authenticate)
+
+
+        public SchedulesController(IAuthenticate authenticate, IScheduleRepo scheduleRepo, IDentistRepo dentistRepo)
         {
-            _context = context;
             _authenticate = authenticate;
+            _scheduleRepo = scheduleRepo;
+            _dentistRepo = dentistRepo;
         }
 
-        // GET: Schedules
-        public async Task<IActionResult> IndexD()
+        public IActionResult IndexD()
         {
             string token;
             HttpContext.Request.Cookies.TryGetValue("token", out token);
             int id = int.Parse(_authenticate.ValidateIdJwtToken(token));
 
-            return View(_context.Schedules.Where(x=> x.DentistId == id));
+            return View(_scheduleRepo.GetSchedulebyDentistId(id));
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             string token;
             HttpContext.Request.Cookies.TryGetValue("token", out token);
             int id = int.Parse(_authenticate.ValidateIdJwtToken(token));
 
-            return View(_context.Schedules.Where(x => x.PatientId == id));
+            return View(_scheduleRepo.GetSchedulebyPatientId(id));
         }
 
         
 
         public IActionResult Create()
         {
-            List<Dentist> FullName = new List<Dentist>(from x in _context.Dentists select new Dentist { FirstName = x.FirstName, LastName = x.LastName });
+            List<Dentist> FullName = _dentistRepo.AllDentists();
             string[] niz = new string[FullName.Count()];
             for (int i = 0; i < FullName.Count; i++)
             {
@@ -69,13 +72,13 @@ namespace Dental.Controllers
 
             Schedule schedule = new Schedule();
             string[] fl = createSchedulesDto.DentistFN.Split(' ');
-            var den = _context.Dentists.FirstOrDefault(x => x.FirstName == fl[0] && x.LastName == fl[1] );
+            var den = _dentistRepo.GetDentistbyFullName(fl[0], fl[1]);
             schedule.DentistId = den.DentistId;
             schedule.PatientId = id;
             if (ModelState.IsValid)
             {
-                _context.Add(schedule);
-                await _context.SaveChangesAsync();
+                _scheduleRepo.CreateSchedule(schedule);
+                await _scheduleRepo.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             return View();
@@ -88,7 +91,7 @@ namespace Dental.Controllers
                 return NotFound();
             }
 
-            var schedule = await _context.Schedules.FindAsync(id);
+            var schedule = await _scheduleRepo.GetSchedulebyId(id);
             if (schedule == null)
             {
                 return NotFound();
@@ -113,12 +116,12 @@ namespace Dental.Controllers
             {
                 try
                 {
-                    _context.Update(schedule);
-                    await _context.SaveChangesAsync();
+                    _scheduleRepo.UpdateSchedule(schedule);
+                    await _scheduleRepo.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ScheduleExists(schedule.ScheduleId))
+                    if (!_scheduleRepo.ScheduleExists(schedule.ScheduleId))
                     {
                         return NotFound();
                     }
@@ -137,7 +140,6 @@ namespace Dental.Controllers
             return View(schedule);
         }
 
-        // GET: Schedules/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -145,8 +147,7 @@ namespace Dental.Controllers
                 return NotFound();
             }
 
-            var schedule = await _context.Schedules
-                .FirstOrDefaultAsync(m => m.ScheduleId == id);
+            var schedule = await _scheduleRepo.GetSchedulebyId(id);
             if (schedule == null)
             {
                 return NotFound();
@@ -155,22 +156,15 @@ namespace Dental.Controllers
             return View(schedule);
         }
 
-        // POST: Schedules/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var schedule = await _context.Schedules.FindAsync(id);
-            _context.Schedules.Remove(schedule);
-            await _context.SaveChangesAsync();
+            var schedule = await _scheduleRepo.GetSchedulebyId(id);
+            _scheduleRepo.DeleteSchedule(schedule);
+            await _scheduleRepo.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ScheduleExists(int id)
-        {
-            return _context.Schedules.Any(e => e.ScheduleId == id);
-        }
-
-        
     }
 }

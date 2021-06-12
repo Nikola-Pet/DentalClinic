@@ -10,14 +10,12 @@ namespace Dental.Controllers
 {
     public class PatientsController : Controller
     {
-        private readonly DentalClinicContext _context;
         private readonly IAuthenticate _authenticate;
         private readonly IPatientRepo _patientRepo;
 
 
-        public PatientsController(DentalClinicContext context, IAuthenticate authenticate, IPatientRepo patientRepo)
+        public PatientsController(IAuthenticate authenticate, IPatientRepo patientRepo)
         {
-            _context = context;
             _authenticate = authenticate;
             _patientRepo = patientRepo;
         }
@@ -74,12 +72,12 @@ namespace Dental.Controllers
             {
                 try
                 {
-                    await _patientRepo.UpdatePatient(patient);
+                     _patientRepo.UpdatePatient(patient);
                     await _patientRepo.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PatientExists(patient.PatientId))
+                    if (!_patientRepo.PatientExists(patient.PatientId))
                     {
                         return NotFound();
                     }
@@ -101,8 +99,7 @@ namespace Dental.Controllers
             int id = int.Parse(_authenticate.ValidateIdJwtToken(token));
 
 
-            var patient = await _context.Patients
-                .FirstOrDefaultAsync(m => m.PatientId == id);
+            var patient = await _patientRepo.GetPatientbyId(id);
             if (patient == null)
             {
                 return NotFound();
@@ -119,15 +116,11 @@ namespace Dental.Controllers
             HttpContext.Request.Cookies.TryGetValue("token", out token);
             int id = int.Parse(_authenticate.ValidateIdJwtToken(token));
 
-            var patient = await _context.Patients.FindAsync(id);
-            _context.Patients.Remove(patient);
-            await _context.SaveChangesAsync();
+            var patient = await _patientRepo.GetPatientbyId(id);
+             _patientRepo.DeletePatient(patient);
+            await _patientRepo.SaveChanges();
+            HttpContext.Response.Cookies.Delete("token");
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool PatientExists(int id)
-        {
-            return _context.Patients.Any(e => e.PatientId == id);
         }
     }
 }

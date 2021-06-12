@@ -65,7 +65,7 @@ namespace Dental.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LoginPatient([Bind("Email,Password")] Patient patient)
+        public IActionResult LoginPatient([Bind("Email,Password")] Patient patient)
         {
 
             var user = _authenticate.GetPatientAsync(patient.Email, patient.Password);
@@ -92,7 +92,7 @@ namespace Dental.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LoginDentist([Bind("Email,Password")] Dentist dentist)
+        public  IActionResult LoginDentist([Bind("Email,Password")] Dentist dentist)
         {
 
             var user = _authenticate.GetDentistAsync(dentist.Email, dentist.Password);
@@ -117,7 +117,7 @@ namespace Dental.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
             HttpContext.Response.Cookies.Delete("token");
             return  RedirectToAction("Index", "Home");

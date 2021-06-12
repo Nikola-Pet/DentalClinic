@@ -10,7 +10,9 @@ namespace Dental.Data
     {
         string GetPatienttFullNamebyId(int id);
         Task<Patient> GetPatientbyId(int id);
-        Task UpdatePatient(Patient patient);
+        void UpdatePatient(Patient patient);
         Task SaveChanges();
+        void DeletePatient(Patient patient);
+        bool PatientExists(int id);
     }
 }

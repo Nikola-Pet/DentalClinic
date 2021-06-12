@@ -20,19 +20,5 @@ namespace Dental.Data
             var passwordBytes = Encoding.UTF8.GetBytes(password);
             return Convert.ToBase64String(passwordBytes);
         }
-
-        //public static string Dencrypt(string encodeData)
-        //{
-        //    if (string.IsNullOrEmpty(encodeData))
-        //    {
-        //        return null;
-        //    }
-
-        //    var encodeBytes = Convert.FromBase64String(encodeData);
-        //    var result = Encoding.UTF8.GetString(encodeBytes);
-        //    string password = result.Substring(0, result.Length - Key.Length);
-
-        //    return password;
-        //}
     }
 }
