@@ -324,3 +324,4 @@ C:\Users\19pet\OneDrive\Dokumenti\GitHub\DentalClinic\obj\Debug\net5.0\Dental.dl
 C:\Users\19pet\OneDrive\Dokumenti\GitHub\DentalClinic\obj\Debug\net5.0\ref\Dental.dll
 C:\Users\19pet\OneDrive\Dokumenti\GitHub\DentalClinic\obj\Debug\net5.0\Dental.pdb
 C:\Users\19pet\OneDrive\Dokumenti\GitHub\DentalClinic\obj\Debug\net5.0\Dental.genruntimeconfig.cache
+C:\Users\19pet\OneDrive\Dokumenti\GitHub\DentalClinic\obj\Debug\net5.0\Razor\Views\Account\ChangePassword.cshtml.g.cs

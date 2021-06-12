@@ -1,4 +1,5 @@
 ﻿using Dental.Data;
+using Dental.DTOs;
 using Dental.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -23,16 +24,23 @@ namespace Dental.Controllers
 
         private readonly IAuthenticate _authenticate;
         private readonly IMedicalRecordRepo _medicalRecord;
+        private readonly IPatientRepo _patientRepo;
 
 
 
 
-        public AccountController(IAuthenticate authenticate, IMedicalRecordRepo medicalRecord)
+
+        public AccountController(IAuthenticate authenticate, IMedicalRecordRepo medicalRecord, IPatientRepo patientRepo)
         {
             _authenticate = authenticate;
             _medicalRecord = medicalRecord;
+            _patientRepo = patientRepo;
         }
         public IActionResult Reg()
+        {
+            return View();
+        }
+        public IActionResult ChangePassword()
         {
             return View();
         }
@@ -76,7 +84,7 @@ namespace Dental.Controllers
             
             if (ModelState.IsValid)
             {
-                var token =  _authenticate.GenerateToken(user.Result.PatientId.ToString() ,user.Result.Email, "Patient");
+                var token =  _authenticate.GenerateToken(user.Result.PatientId.ToString(),user.Result.Email, "Patient");
                 
                 if (token == null)
                 {
@@ -122,6 +130,36 @@ namespace Dental.Controllers
             HttpContext.Response.Cookies.Delete("token");
             return  RedirectToAction("Index", "Home");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
+        {
+            string token;
+            HttpContext.Request.Cookies.TryGetValue("token", out token);
+            int id = int.Parse(_authenticate.ValidateIdJwtToken(token));
+
+
+            var patient = await _patientRepo.GetPatientbyId(id);
+            if (patient == null)
+            {
+                return NotFound();
+            }
+            if (patient.Password != Data.Utility.Encrypt(changePasswordDto.Password))
+            {
+                BadRequest(new { message = "The password is incorrect" });
+            }
+            if (changePasswordDto.NewPassword != changePasswordDto.ConfirmPassword)
+            {
+                BadRequest(new { message = "The new password is incorrect" });
+            }
+
+            patient.Password = Data.Utility.Encrypt(changePasswordDto.NewPassword);
+            _patientRepo.UpdatePatient(patient);
+            await _patientRepo.SaveChanges();
+
+            return  RedirectToAction("Details", "Patients");
+        }
+
 
 
 
