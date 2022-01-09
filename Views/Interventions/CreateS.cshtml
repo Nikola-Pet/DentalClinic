@@ -13,9 +13,9 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="MedicalRecordNumber" class="control-label">Medical record number</label>
-                <input asp-for="MedicalRecordNumber" class="form-control" />
-                <span asp-validation-for="MedicalRecordNumber" class="text-danger"></span>
+                @*<label asp-for="MedicalRecordNumber" class="control-label">Medical record number</label>*@
+                <input type="hidden" asp-for="MedicalRecordNumber" class="form-control" />
+                <span type="hidden" asp-validation-for="MedicalRecordNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DateTime" class="control-label">Date</label>

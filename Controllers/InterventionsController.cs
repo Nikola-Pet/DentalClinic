@@ -94,6 +94,9 @@ namespace Dental.Controllers
             intervention.MedicalRecordNumber = mr.MedicalRecordNumber;
             intervention.DateTime = (DateTime)schedule.DateTime;
 
+            _scheduleRepo.DeleteSchedule(schedule);
+            await _scheduleRepo.SaveChanges();
+
             return View(intervention);
         }
 

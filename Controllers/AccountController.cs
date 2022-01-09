@@ -75,28 +75,30 @@ namespace Dental.Controllers
         [HttpPost]
         public IActionResult LoginPatient([Bind("Email,Password")] Patient patient)
         {
-
-            var user = _authenticate.GetPatientAsync(patient.Email, patient.Password);
-            if (user == null)
+            try
             {
-                return null; 
-            }
-            
-            if (ModelState.IsValid)
-            {
-                var token =  _authenticate.GenerateToken(user.Result.PatientId.ToString(),user.Result.Email, "Patient");
-                
-                if (token == null)
+                var user = _authenticate.GetPatientAsync(patient.Email, patient.Password);
+                if (user == null)
                 {
-                    return BadRequest(new { message = "incorect" });
+                    return null;
                 }
 
-                 HttpContext.Response.Cookies.Append("token", token, new Microsoft.AspNetCore.Http.CookieOptions { Expires = DateTime.Now.AddDays(1) });
+                if (ModelState.IsValid)
+                {
+                    var token = _authenticate.GenerateToken(user.Result.PatientId.ToString(), user.Result.Email, "Patient");
+
+                   
+                    HttpContext.Response.Cookies.Append("token", token, new Microsoft.AspNetCore.Http.CookieOptions { Expires = DateTime.Now.AddDays(1) });
 
 
-                return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home");
+                }
+                return View();
             }
-            return View();
+            catch (Exception)
+            {
+                return BadRequest(new { message = "incorect, go back and try again" });
+            }
         }
 
         [HttpPost]
