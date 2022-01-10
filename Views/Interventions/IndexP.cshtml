@@ -1,11 +1,26 @@
 ﻿@model IEnumerable<Dental.Models.Intervention>
 @inject Dental.Data.IDentistRepo IDentist
+@inject Dental.Data.IMedicalRecordRepo IMedicalRecord
+@inject Dental.Data.IAuthenticate Authenticate
 @{
     ViewData["Title"] = "Index";
 
 }
 
-<h1>Intervention</h1>
+@{ 
+    string token = Context.Request.Cookies["Token"].ToString();
+    string id = Authenticate.ValidateIdJwtToken(token);
+    int idd = int.Parse(id);
+    var mr = IMedicalRecord.GetMedicalRecordbyPatientId(idd);
+}
+
+<h4>
+    Medical record number -
+   
+        @mr.MedicalRecordNumber
+    
+</h4>
+<h1>Intervention</h1> 
 
 
 <table class="table">

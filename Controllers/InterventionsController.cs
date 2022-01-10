@@ -57,25 +57,32 @@ namespace Dental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateInterventionDto createInterventionDto)
         {
-            string token;
-            HttpContext.Request.Cookies.TryGetValue("token", out token);
-            int id = int.Parse(_authenticate.ValidateIdJwtToken(token));
-
-            Intervention intervention = new Intervention();
-
-            
-            intervention.DentistId = id;
-            intervention.MedicalRecordNumber = _medicalRecordRepo.GetMedicalRecordNumberbyId(createInterventionDto.MedicalRecordNumber);
-            intervention.DateTime = createInterventionDto.DateTime;
-            intervention.Description = createInterventionDto.Description;
-
-            if (ModelState.IsValid)
+            try
             {
-                _interventionRepo.AddInterverntion(intervention);
-                await _interventionRepo.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                string token;
+                HttpContext.Request.Cookies.TryGetValue("token", out token);
+                int id = int.Parse(_authenticate.ValidateIdJwtToken(token));
+
+                Intervention intervention = new Intervention();
+
+
+                intervention.DentistId = id;
+                intervention.MedicalRecordNumber = _medicalRecordRepo.GetMedicalRecordNumberbyId(createInterventionDto.MedicalRecordNumber);
+                intervention.DateTime = createInterventionDto.DateTime;
+                intervention.Description = createInterventionDto.Description;
+
+                if (ModelState.IsValid)
+                {
+                    _interventionRepo.AddInterverntion(intervention);
+                    await _interventionRepo.SaveChanges();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(intervention);
             }
-            return View(intervention);
+            catch (Exception)
+            {
+                return BadRequest(new { message = "incorect, go back and try again" });
+            }
         }
 
         public async Task<IActionResult> CreateS(int? id)
